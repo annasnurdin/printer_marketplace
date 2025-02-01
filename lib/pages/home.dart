@@ -1,3 +1,8 @@
+//TODO
+/*
+
+*/
+
 import 'package:flutter/material.dart';
 import 'package:printer_marketplace/model/pesanan_model.dart';
 import 'package:printer_marketplace/themes/colors.dart';
@@ -102,24 +107,31 @@ class _HomeState extends State<Home> {
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       expansionTileTheme: const ExpansionTileThemeData(
-                        iconColor: Colors.black, // Warna ikon saat tile terbuka
-                        collapsedIconColor:
-                            Colors.black, // Warna ikon saat tile tertutup
+                        iconColor: Colors.black,
+                        collapsedIconColor: Colors.black,
                       ),
                     ),
                     child: ExpansionTile(
+                      controller: pesanan[index].controller,
                       expandedAlignment: Alignment.topLeft,
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                pesanan[index].sudahPrint = true;
+                              });
+                              if (pesanan[index].controller.isExpanded) {
+                                pesanan[index].controller.collapse();
+                              }
+                            },
                             icon: const Icon(Icons.print_outlined),
                             tooltip: 'Print Alamat',
                           ),
                           AnimatedRotation(
                             turns: pesanan[index].expand ? 0.5 : 0.0,
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 350),
                             child: const Icon(Icons.keyboard_arrow_down),
                           ),
                         ],
@@ -129,7 +141,17 @@ class _HomeState extends State<Home> {
                           pesanan[index].expand = expanded;
                         });
                       },
-                      leading: const Icon(Icons.check_box, color: Colors.blue),
+                      leading: IconButton(
+                        icon: Icon(pesanan[index].sudahPrint
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank_rounded),
+                        onPressed: () {
+                          setState(() {
+                            pesanan[index].sudahPrint =
+                                !pesanan[index].sudahPrint;
+                          });
+                        },
+                      ),
                       title: Text(
                         pesanan[index].nomorResi,
                         style: const TextStyle(
