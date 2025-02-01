@@ -14,8 +14,10 @@ class _HomeState extends State<Home> {
     20,
     (i) => Pesanan(
       "SPX123${i + 1}",
-      "alamat  ${i + 1}",
+      "Alamat  ${i + 1}",
       "Shopee Xpress",
+      "Lem ${i + 1}",
+      false,
     ),
   );
   @override
@@ -99,9 +101,34 @@ class _HomeState extends State<Home> {
                       dividerColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
+                      expansionTileTheme: const ExpansionTileThemeData(
+                        iconColor: Colors.black, // Warna ikon saat tile terbuka
+                        collapsedIconColor:
+                            Colors.black, // Warna ikon saat tile tertutup
+                      ),
                     ),
                     child: ExpansionTile(
                       expandedAlignment: Alignment.topLeft,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.print_outlined),
+                            tooltip: 'Print Alamat',
+                          ),
+                          AnimatedRotation(
+                            turns: pesanan[index].expand ? 0.5 : 0.0,
+                            duration: const Duration(milliseconds: 300),
+                            child: const Icon(Icons.keyboard_arrow_down),
+                          ),
+                        ],
+                      ),
+                      onExpansionChanged: (expanded) {
+                        setState(() {
+                          pesanan[index].expand = expanded;
+                        });
+                      },
                       leading: const Icon(Icons.check_box, color: Colors.blue),
                       title: Text(
                         pesanan[index].nomorResi,
@@ -116,6 +143,7 @@ class _HomeState extends State<Home> {
                           horizontal: 16.0, vertical: 8.0),
                       children: [
                         ExpansionTile(
+                          initiallyExpanded: true,
                           expandedAlignment: Alignment.topLeft,
                           title: const Text(
                             'Detail Pesanan',
@@ -129,7 +157,7 @@ class _HomeState extends State<Home> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20),
                                   child: Text(
-                                    pesanan[index].alamat,
+                                    pesanan[index].produk,
                                     style: const TextStyle(fontSize: 16.0),
                                   ),
                                 ),
@@ -138,6 +166,25 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                         const Divider(height: 30),
+                        ExpansionTile(
+                          expandedAlignment: Alignment.topLeft,
+                          title: const Text(
+                            'Alamat',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text(pesanan[index].alamat)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        //ICON
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -151,18 +198,8 @@ class _HomeState extends State<Home> {
                               icon: const Icon(Icons.edit),
                               tooltip: 'Edit',
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.print_outlined),
-                              tooltip: 'Print',
-                            ),
                           ],
                         ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(20, 8, 0, 10),
-                          child: Text(
-                              "Alamatnya disini panjang sekali panjang banget sampai bawah"),
-                        )
                       ],
                     ),
                   ),

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: primaryColor,
           useMaterial3: true,
           dividerTheme: const DividerThemeData(
-            space: 30,
+            space: 20,
             indent: 15,
             endIndent: 15,
           )),
