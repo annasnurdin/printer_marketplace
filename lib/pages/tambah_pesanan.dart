@@ -12,6 +12,7 @@ class TambahPesanan extends StatefulWidget {
 class _TambahPesananState extends State<TambahPesanan> {
   final TextEditingController _nomorResiController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
+  final TextEditingController _qtyController = TextEditingController();
   String? _selectedKurir;
   String? _selectedProduk;
 
@@ -133,6 +134,18 @@ class _TambahPesananState extends State<TambahPesanan> {
                     _selectedProduk = value;
                   });
                 },
+              ),
+              SizedBox(height: 20),
+              TextField(
+                keyboardType: TextInputType.numberWithOptions(),
+                controller: _qtyController,
+                decoration: InputDecoration(
+                  labelText: "QTY",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: biru, width: 2),
+                  ),
+                ),
               ),
             ],
           ),
