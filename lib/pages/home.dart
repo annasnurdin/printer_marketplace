@@ -5,6 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:printer_marketplace/model/pesanan_model.dart';
+import 'package:printer_marketplace/pages/bluetooth_pairing.dart';
+import 'package:printer_marketplace/pages/tambah_pesanan.dart';
 import 'package:printer_marketplace/themes/colors.dart';
 
 class Home extends StatefulWidget {
@@ -33,7 +35,10 @@ class _HomeState extends State<Home> {
         children: [
           FloatingActionButton(
             mini: true,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BluetoothPairing()));
+            },
             tooltip: "Hubungkan Printer",
             backgroundColor: biru,
             foregroundColor: putih,
@@ -41,7 +46,10 @@ class _HomeState extends State<Home> {
           ),
           const SizedBox(height: 3),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TambahPesanan()));
+            },
             tooltip: "Tambah Pesanan",
             backgroundColor: biru,
             foregroundColor: putih,
