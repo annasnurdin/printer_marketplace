@@ -41,3 +41,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Build Folder
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+pubspec.lock
+
+# NIX
+.nix/
