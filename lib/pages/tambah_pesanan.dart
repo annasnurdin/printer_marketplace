@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:printer_marketplace/themes/colors.dart';
+import 'package:printer_marketplace/model/pesanan_model.dart';
+
+import '../model/firestore_service.dart';
 
 class TambahPesanan extends StatefulWidget {
   const TambahPesanan({super.key});
@@ -15,6 +18,7 @@ class _TambahPesananState extends State<TambahPesanan> {
   final TextEditingController _qtyController = TextEditingController();
   String? _selectedKurir;
   String? _selectedProduk;
+  final FirestoreService firestoreService = FirestoreService();
 
   Future<void> _pasteFromClipboard(TextEditingController controller) async {
     ClipboardData? clipboardData =
@@ -26,10 +30,36 @@ class _TambahPesananState extends State<TambahPesanan> {
     }
   }
 
+  Future<void> _simpanPesanan() async {
+    if (_nomorResiController.text.isEmpty ||
+        _alamatController.text.isEmpty ||
+        _qtyController.text.isEmpty ||
+        _selectedKurir == null ||
+        _selectedProduk == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Semua kolom harus diisi!")),
+      );
+      return;
+    }
+
+    final pesanan = Pesanan(
+      _nomorResiController.text,
+      _alamatController.text,
+      _selectedKurir!,
+      _selectedProduk!,
+      int.parse(_qtyController.text), // Perbaikan di sini
+      false, // expand default false
+    );
+
+    await firestoreService.tambahPesanan(pesanan);
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     _nomorResiController.dispose();
     _alamatController.dispose();
+    _qtyController.dispose();
     super.dispose();
   }
 
@@ -38,9 +68,7 @@ class _TambahPesananState extends State<TambahPesanan> {
     return Scaffold(
       backgroundColor: putih,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: _simpanPesanan,
         tooltip: "Simpan",
         backgroundColor: biru,
         foregroundColor: putih,
@@ -49,10 +77,8 @@ class _TambahPesananState extends State<TambahPesanan> {
       appBar: AppBar(
         backgroundColor: biru,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          "Tambah Pesanan",
-          style: TextStyle(color: Colors.white),
-        ),
+        title:
+            const Text("Tambah Pesanan", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Padding(
@@ -102,10 +128,8 @@ class _TambahPesananState extends State<TambahPesanan> {
                   ),
                 ),
                 items: ["SPX", "JNE", "JNT", "REGULER"]
-                    .map((kurir) => DropdownMenuItem(
-                          value: kurir,
-                          child: Text(kurir),
-                        ))
+                    .map((kurir) =>
+                        DropdownMenuItem(value: kurir, child: Text(kurir)))
                     .toList(),
                 onChanged: (value) {
                   setState(() {
@@ -124,10 +148,8 @@ class _TambahPesananState extends State<TambahPesanan> {
                   ),
                 ),
                 items: ["LEM", "PIGEON", "BENANG", "JARUM"]
-                    .map((produk) => DropdownMenuItem(
-                          value: produk,
-                          child: Text(produk),
-                        ))
+                    .map((produk) =>
+                        DropdownMenuItem(value: produk, child: Text(produk)))
                     .toList(),
                 onChanged: (value) {
                   setState(() {
@@ -135,9 +157,9 @@ class _TambahPesananState extends State<TambahPesanan> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
-                keyboardType: TextInputType.numberWithOptions(),
+                keyboardType: TextInputType.number,
                 controller: _qtyController,
                 decoration: InputDecoration(
                   labelText: "QTY",

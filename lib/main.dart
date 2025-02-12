@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:printer_marketplace/firebase_options.dart';
 import 'package:printer_marketplace/pages/home.dart';
-import 'package:printer_marketplace/pages/tambah_pesanan.dart';
 import 'package:printer_marketplace/themes/colors.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
